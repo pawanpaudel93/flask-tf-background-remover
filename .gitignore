@@ -1,0 +1,6 @@
+.vscode
+**/__pycache__/**
+venv
+.env
+static/images/*
+mask_rcnn_coco.h5
