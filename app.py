@@ -6,6 +6,7 @@ from flask import Flask, flash, request, render_template, redirect, session, url
 from flask_dropzone import Dropzone
 from flask_uploads import UploadSet, configure_uploads, IMAGES, patch_request_class
 from werkzeug.utils import secure_filename
+from decouple import config
 import tensorflow as tf
 
 import coco
@@ -15,7 +16,7 @@ from model import get_model
 app = Flask(__name__, static_url_path='/static')
 dropzone = Dropzone(app)
 
-app.secret_key = 'super secret key'
+app.secret_key = config("SECRET_KEY", cast=str, default="mynameispawan")
 app.config['SESSION_TYPE'] = 'filesystem'
 
 # Dropzone settings

@@ -1,0 +1,21 @@
+{
+    "name": "Background Remover Tensorflow",
+    "description": "Background Remover Tensorflow",
+    "repository": "https://github.com/pawanpaudel93/flask-tf-background-remover",
+    "logo": "https://raw.githubusercontent.com/pawanpaudel93/flask-tf-background-remover/master/static/flask-tensorflow.jpg",
+    "keywords": ["flask", "Tensorflow", "background-remover"],
+    "buildpacks": [
+      {
+        "url": "heroku/python"
+      },
+      {
+        "url": "https://github.com/heroku/heroku-buildpack-apt"
+      }
+    ],
+    "env": {
+        "SECRET_KEY": {
+            "description": "Flask app Secret key",
+            "generator": "secret"
+        }
+    }
+}
