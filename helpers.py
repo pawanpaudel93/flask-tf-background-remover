@@ -3,6 +3,7 @@ import numpy as np
 import os
 import PIL.Image
 import sys
+import matplotlib.pyplot as plt
 
 from model import get_model
 
@@ -25,6 +26,7 @@ class_names = [
     'teddy bear', 'hair drier', 'toothbrush'
 ]
 
+
 def apply_mask(image, mask):
     image[:, :, 0] = np.where(
         mask == 0,
@@ -43,11 +45,12 @@ def apply_mask(image, mask):
     )
     return image
 
+
 # This function is used to show the object detection result in original image.
 def display_instances(image, boxes, masks, ids, names, scores):
     # max_area will save the largest object for all the detection results
     max_area = 0
-    
+
     # n_instances saves the amount of all objects
     n_instances = boxes.shape[0]
 
@@ -80,25 +83,27 @@ def display_instances(image, boxes, masks, ids, names, scores):
         # apply mask for the image
     # by mistake you put apply_mask inside for loop or you can write continue in if also
     image = apply_mask(image, mask)
-        
+
     return image
+
 
 def white_background(image):
     image = image.convert('RGBA')
-    L,H = image.size
+    L, H = image.size
     color_0 = image.getpixel((0, 0))
     for h in range(H):
         for l in range(L):
             dot = (l, h)
             color_1 = image.getpixel(dot)
             if color_1 == color_0:
-                color_1 = (255,255,255)
+                color_1 = (255, 255, 255)
                 image.putpixel(dot, color_1)
     return image
 
+
 def transparent_background(image):
     image = image.convert('RGBA')
-    L,H = image.size
+    L, H = image.size
     color_0 = image.getpixel((0, 0))
     for h in range(H):
         for l in range(L):
@@ -109,8 +114,12 @@ def transparent_background(image):
                 image.putpixel(dot, color_1)
     return image
 
-def remove_bg(model, path, output_filepath, graph):
+
+def remove_bg(model, path, output_filepath, graph, DEFAULT_CONFIG):
     image = np.array(PIL.Image.open(path))
+    _, _, ch = image.shape
+    if ch == 4:
+        image = np.array(PIL.Image.open(path).convert("RGB"))
     with graph.as_default():
         results = model.detect([image], verbose=0)
         r = results[0]
@@ -118,9 +127,20 @@ def remove_bg(model, path, output_filepath, graph):
         image, r['rois'], r['masks'], r['class_ids'], class_names, r['scores']
     )
     image = PIL.Image.fromarray(np.array(image, dtype=np.uint8))
-    image = transparent_background(image)
-    output_filepath = output_filepath.split(".")
-    output_filepath[-1] = "png"
-    output_filepath = ".".join(output_filepath)
-    image.save(output_filepath)
+    if DEFAULT_CONFIG["BG_WHITE"]:
+        image = white_background(image)
+    else:
+        image = transparent_background(image)
+    if DEFAULT_CONFIG["BLACKnWHITE"]:
+        image = cv2.cvtColor(np.array(image), cv2.COLOR_BGR2GRAY)
+        cv2.imwrite(output_filepath, image)
+    else:
+        if DEFAULT_CONFIG["BG_WHITE"]:
+            image = np.array(image, dtype=np.uint8)
+            plt.imsave(output_name, image, dpi=1000)
+        else:
+            output_filepath = output_filepath.split(".")
+            output_filepath[-1] = "png"
+            output_filepath = ".".join(output_filepath)
+            image.save(output_filepath)
     return output_filepath.split('/')[-1]

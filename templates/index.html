@@ -1,35 +1,57 @@
-<!-- <!doctype html>
-<title>Python Flask File Upload</title>
-<h2>Select a file to upload</h2>
-<p>
-	{% with messages = get_flashed_messages() %}
-	  {% if messages %}
-		<ul class=flashes>
-		{% for message in messages %}
-		  <li>{{ message }}</li>
-		{% endfor %}
-		</ul>
-	  {% endif %}
-	{% endwith %}
-</p>
-<form method="post" action="/" enctype="multipart/form-data">
-    <dl>
-		<p>
-			<input type="file" name="file" autocomplete="off" required>
-		</p>
-    </dl>
-    <p>
-		<input type="submit" value="Submit">
-	</p>
-</form> -->
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Background Remover App</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		{{ dropzone.load() }}
+		{{ dropzone.style('border: 2px dashed #0087F7; margin: 10%; min-height: 400px;') }}
+	</head>
 
-<head>
-    <title>Background Remover App</title>
-      {{ dropzone.load() }}
-      {{ dropzone.style('border: 2px dashed #0087F7; margin: 10%; min-height: 400px;') }}
-</head>
-
-<body>
-    <h1>Upload your images!</h1>
-    {{ dropzone.create(action_view='bg_remove') }}
-  </body>
+	<body>
+		<div class="container">
+			<h1>Upload your images!</h1>
+			<hr>
+			<input type="checkbox" value="bnw" id="bnw" style="margin-right:10px;"><label for="bnw"> Black and White(☑)/Colored(☐)</label><br>
+			<input type="checkbox" value="bgwhite" id="bgwhite" style="margin-right:10px;"><label for="bgwhite"> Background White(☑)/Transparent(☐)</label>
+			{{ dropzone.create(action_view='bg_remove') }}
+		</div>
+		<script>
+			var data;
+			$("#bnw").change(function() {
+				if(this.checked) {
+					data = {"bnw": "True"}
+					switch_env("#bnw")
+				} else {
+					data = {"bnw": "False"}
+					switch_env("#bnw")
+				}
+			});
+			$("#bgwhite").change(function() {
+				if(this.checked) {
+					data = {"bgwhite": "True"}
+					switch_env("#bgwhite")
+				} else {
+					data = {"bgwhite": "False"}
+					switch_env("#bgwhite")
+				}
+			});
+			function switch_env(element) {
+				$.ajax({
+					type: "POST",
+					contentType: 'application/json',
+					data: JSON.stringify(data),
+					url: "/switch/config",
+					dataType: "json",
+					success: function(data) { 
+						console.log(data);                    
+					},
+					error: function(jqXHR) {
+						console.log(jqXHR);
+					}
+				})
+			}
+		</script>
+	</body>
+</html>
