@@ -2,7 +2,6 @@
 **/__pycache__/**
 venv
 .env
-static/images/*
 mask_rcnn_coco.h5
 logs
 
