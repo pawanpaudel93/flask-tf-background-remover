@@ -1,6 +1,6 @@
-# Flask Pytorch Background Remover
+# Flask Tensorflow Background Remover
 
-![Flask Pytorch Background Remover](https://raw.githubusercontent.com/pawanpaudel93/flask-pytorch-background-remover/master/static/flask-tensorflow.jpg)
+![Flask Tensorflow Background Remover](https://raw.githubusercontent.com/pawanpaudel93/flask-tf-background-remover/master/static/flask-tensorflow.jpg)
 
 ## Development Installation
 
@@ -10,6 +10,11 @@
 - Install requirements of requirements.txt
 - Run command `flask run`
 
-## Heroku Deployment
+## Background Removal Samples
+Original
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/pawanpaudel93/flask-tf-background-remover/tree/master)
+<img src="https://raw.githubusercontent.com/pawanpaudel93/flask-tf-background-remover/master/static/original.jpeg" alt="original" width="400" height="500">
+
+<img src="https://raw.githubusercontent.com/pawanpaudel93/flask-tf-background-remover/master/static/bnw_white.jpeg" alt="bnw_white" width="400" height="500"><img src="https://raw.githubusercontent.com/pawanpaudel93/flask-tf-background-remover/master/static/bnw_transparent.png" alt="bnw_transparent" width="400" height="500"><img src="https://raw.githubusercontent.com/pawanpaudel93/flask-tf-background-remover/master/static/colored_white.jpeg" alt="colored_white" width="400" height="500"><img src="https://raw.githubusercontent.com/pawanpaudel93/flask-tf-background-remover/master/static/colored_transparent.png" alt="colored_transparent" width="400" height="500">
+
+Background Removal Tensorflow code from: [Mask-RCNN-remove-background](https://github.com/jysh1214/Mask-RCNN-remove-background)
