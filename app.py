@@ -42,8 +42,9 @@ DEFAULT_CONFIG = {"BLACKnWHITE": False, "BG_WHITE": False}
 @app.route('/initilize', methods=['GET'])
 def initialize_model():
     global graph, model
-    graph = tf.get_default_graph()
-    model = get_model()
+    if not (graph and model):
+        graph = tf.get_default_graph()
+        model = get_model()
     return jsonify(success=True)
 
 
@@ -61,10 +62,12 @@ def output_file(filename):
 def switch_config():
     if request.method == 'POST':
         data = request.get_json()
+        print(data)
         if "bnw" in data:
             DEFAULT_CONFIG["BLACKnWHITE"] = bool(data["bnw"])
         if "bgwhite" in data:
             DEFAULT_CONFIG["BG_WHITE"] = bool(data["bgwhite"])
+        print(DEFAULT_CONFIG)
         return jsonify(success=True)
 
 

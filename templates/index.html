@@ -20,25 +20,29 @@
 		</div>
 		<script>
 			var data;
+			$(document).ready(function() {
+				let data = {"bnw": 0, "bgwhite": 0}
+				switch_env(data);
+			});
 			$("#bnw").change(function() {
 				if(this.checked) {
-					data = {"bnw": "True"}
-					switch_env("#bnw")
+					let data = {"bnw": 1}
+					switch_env(data);
 				} else {
-					data = {"bnw": "False"}
-					switch_env("#bnw")
+					let data = {"bnw": 0}
+					switch_env(data);
 				}
 			});
 			$("#bgwhite").change(function() {
 				if(this.checked) {
-					data = {"bgwhite": "True"}
-					switch_env("#bgwhite")
+					let data = {"bgwhite": 1}
+					switch_env(data);
 				} else {
-					data = {"bgwhite": "False"}
-					switch_env("#bgwhite")
+					let data = {"bgwhite": 0}
+					switch_env(data);
 				}
 			});
-			function switch_env(element) {
+			function switch_env(data) {
 				$.ajax({
 					type: "POST",
 					contentType: 'application/json',

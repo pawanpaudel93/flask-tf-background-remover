@@ -114,8 +114,14 @@ def transparent_background(image):
                 image.putpixel(dot, color_1)
     return image
 
+def change_extension(filepath, extension):
+    filepath = filepath.split(".")
+    filepath[-1] = extension
+    filepath = ".".join(filepath)
+    return filepath
 
 def remove_bg(model, path, output_filepath, graph, DEFAULT_CONFIG):
+    print(DEFAULT_CONFIG)
     image = np.array(PIL.Image.open(path))
     _, _, ch = image.shape
     if ch == 4:
@@ -127,20 +133,26 @@ def remove_bg(model, path, output_filepath, graph, DEFAULT_CONFIG):
         image, r['rois'], r['masks'], r['class_ids'], class_names, r['scores']
     )
     image = PIL.Image.fromarray(np.array(image, dtype=np.uint8))
-    if DEFAULT_CONFIG["BG_WHITE"]:
+
+    if DEFAULT_CONFIG["BG_WHITE"] and not DEFAULT_CONFIG["BLACKnWHITE"]:
         image = white_background(image)
-    else:
+        image = np.array(image, dtype=np.uint8)
+        plt.imsave(output_filepath, image, dpi=1000)
+    
+    if not DEFAULT_CONFIG["BG_WHITE"] and DEFAULT_CONFIG["BLACKnWHITE"]:
+        image = cv2.cvtColor(np.array(image), cv2.COLOR_BGR2GRAY)
+        image = PIL.Image.fromarray(image)
         image = transparent_background(image)
-    if DEFAULT_CONFIG["BLACKnWHITE"]:
+        output_filepath = change_extension(output_filepath, "png")
+        image.save(output_filepath)
+    
+    if not DEFAULT_CONFIG["BG_WHITE"] and not DEFAULT_CONFIG["BLACKnWHITE"]:
+        image = transparent_background(image)
+        output_filepath = change_extension(output_filepath, "png")
+        image.save(output_filepath)
+
+    if DEFAULT_CONFIG["BG_WHITE"] and DEFAULT_CONFIG["BLACKnWHITE"]:
+        image = white_background(image)
         image = cv2.cvtColor(np.array(image), cv2.COLOR_BGR2GRAY)
         cv2.imwrite(output_filepath, image)
-    else:
-        if DEFAULT_CONFIG["BG_WHITE"]:
-            image = np.array(image, dtype=np.uint8)
-            plt.imsave(output_name, image, dpi=1000)
-        else:
-            output_filepath = output_filepath.split(".")
-            output_filepath[-1] = "png"
-            output_filepath = ".".join(output_filepath)
-            image.save(output_filepath)
     return output_filepath.split('/')[-1]
