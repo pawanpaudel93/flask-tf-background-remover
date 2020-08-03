@@ -13,6 +13,7 @@
 		<div class="container">
 			<h1>Upload your images!</h1>
 			<hr>
+			<button type="button" class="btn btn-primary" id="initilize" onclick="initilize();">Initilize Model</button><br><br>
 			<input type="checkbox" value="bnw" id="bnw" style="margin-right:10px;"><label for="bnw"> Black and White(☑)/Colored(☐)</label><br>
 			<input type="checkbox" value="bgwhite" id="bgwhite" style="margin-right:10px;"><label for="bgwhite"> Background White(☑)/Transparent(☐)</label>
 			{{ dropzone.create(action_view='bg_remove') }}
@@ -49,6 +50,27 @@
 					},
 					error: function(jqXHR) {
 						console.log(jqXHR);
+					}
+				})
+			}
+			function initilize() {
+				$("#initilize").toggleClass('btn btn-primary');
+				$("#initilize").html('Model Initilizing...');
+				$.ajax({
+					type: "GET",
+					contentType: 'application/json',
+					url: "/initilize",
+					dataType: "json",
+					success: function(data) { 
+						console.log(data);
+						$("#initilize").toggleClass('btn btn-success');
+						$("#initilize").html('Model Initilized');
+						$("#initilize").prop("disabled",true);              
+					},
+					error: function(jqXHR) {
+						console.log(jqXHR);
+						$("#initilize").toggleClass('btn btn-danger');
+						$("#initilize").html('Model Not Initilized');
 					}
 				})
 			}

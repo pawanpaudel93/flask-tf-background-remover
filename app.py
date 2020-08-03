@@ -34,10 +34,17 @@ configure_uploads(app, images)
 patch_request_class(app)  # set maximum file size, default is 16MB
 
 # model
-graph = tf.get_default_graph()
-model = get_model()
+graph = None
+model = None
 
 DEFAULT_CONFIG = {"BLACKnWHITE": False, "BG_WHITE": False}
+
+@app.route('/initilize', methods=['GET'])
+def initialize_model():
+    global graph, model
+    graph = tf.get_default_graph()
+    model = get_model()
+    return jsonify(success=True)
 
 
 def allowed_file(filename):
