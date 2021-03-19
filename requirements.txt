@@ -11,7 +11,7 @@ mrcnn==0.2
 numpy==1.16.4
 opencv-contrib-python==4.2.0.34
 opencv-python==4.2.0.34
-Pillow==7.2.0
+Pillow==8.1.1
 pycocotools==2.0.1
 python-decouple==3.3
 scikit-image==0.17.2
